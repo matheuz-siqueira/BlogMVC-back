@@ -9,7 +9,7 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
     public void Configure(EntityTypeBuilder<Comment> builder)
     {
         builder.HasKey(t => t.Id); 
-        builder.Property(p => p.Commentary).HasMaxLength(1000); 
+        builder.Property(p => p.Commentary).HasMaxLength(150); 
         builder.HasOne(e => e.Post).WithMany(e => e.Comments).HasForeignKey(e => e.PostId); 
     }
 }
