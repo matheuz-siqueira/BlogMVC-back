@@ -21,9 +21,11 @@ public class PostRepository : IPostRepository
         return (tracking)
             ? await _context.Posts
                 .Include(p => p.Comments)
+                .Include(p => p.Tags)
                 .FirstOrDefaultAsync(p => p.Id == id)
             : await _context.Posts.AsNoTracking()
                 .Include(p => p.Comments)
+                .Include(p => p.Tags)
                 .FirstOrDefaultAsync(p => p.Id == id); 
     }
 

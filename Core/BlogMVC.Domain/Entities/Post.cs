@@ -20,8 +20,7 @@ public sealed class Post : BaseEntity
     public string Subtitle { get; private set; }
     public string Content { get; private set; }
     public DateTime CreatedAt { get; private set; } = DateTime.Now; 
-    public IEnumerable<string> Tags { get; private set; }
-
+    public ICollection<Tags> Tags { get; private set; }
     public ICollection<Comment> Comments { get; set; }
 
     private void ValidationDomain(string title, string subtitle, string content)
