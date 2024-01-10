@@ -4,9 +4,9 @@ namespace BlogMVC.Domain.Interfaces;
 
 public interface ICommentRepository
 {
-    Task<IEnumerable<Comment>> GetCommentsAsync(); 
-    Task<Comment> GetCommentAsync(int id);
+    Task<IEnumerable<Comment>> GetAllAsync(); 
+    Task<Comment> GetByIdAsync(int id, bool tracking = true);
     Task<Comment> CreateAsync(Comment comment); 
-    Task UpdateAsync(Comment comment); 
+    Task UpdateAsync(); 
     Task RemoveAsync(int id); 
 }

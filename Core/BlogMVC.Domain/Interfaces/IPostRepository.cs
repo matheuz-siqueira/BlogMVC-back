@@ -4,9 +4,9 @@ namespace BlogMVC.Domain.Interfaces;
 
 public interface IPostRepository
 {
-    Task<IEnumerable<Post>> GetPostsAsync(); 
-    Task<Post> GetPostAsync(int id); 
+    Task<IEnumerable<Post>> GetAllAsync(); 
+    Task<Post> GetByIdAsync(int id, bool tracking = true); 
     Task<Post> CreateAsync(Post post); 
-    Task UpdateAsync(Post post); 
+    Task UpdateAsync(); 
     Task RemoveAsync(int id); 
 }
