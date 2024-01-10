@@ -1,0 +1,18 @@
+using BlogMVC.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace BlogMVC.Infra.Data.Context;
+
+public class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    { }
+    public DbSet<Post> Posts { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder mb)
+    {
+        base.OnModelCreating(mb);
+        mb.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+    }
+}
