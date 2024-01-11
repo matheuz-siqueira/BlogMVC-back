@@ -9,5 +9,4 @@ public class CreatePostRequestJson
     public string Subtitle { get; set; }
     public string Content { get; set; }
     public IEnumerable<CreateTagRequestJson> Tags { get; set; }
-    public IEnumerable<CreateCommentRequestJson> Comments { get; set; }
 }

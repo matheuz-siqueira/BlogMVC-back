@@ -14,7 +14,9 @@ public class PostRepository : IPostRepository
     }
     public async Task<IEnumerable<Post>> GetAllAsync()
     {
-        return await _context.Posts.AsNoTracking().ToListAsync(); 
+        return await _context.Posts.AsNoTracking()
+            .Include(p => p.Tags)
+            .ToListAsync(); 
     }
     public async Task<Post> GetByIdAsync(int id, bool tracking = true)
     {
