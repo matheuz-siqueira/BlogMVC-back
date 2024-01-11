@@ -1,3 +1,6 @@
+using BlogMVC.Application.Interfaces;
+using BlogMVC.Application.Mapping;
+using BlogMVC.Application.Services;
 using BlogMVC.Domain.Interfaces;
 using BlogMVC.Infra.Data.Context;
 using BlogMVC.Infra.Data.Repositories;
@@ -14,6 +17,8 @@ public static class DependencyInjection
     {
         AddContext(services, configuration);
         AddRepositories(services); 
+        AddServices(services); 
+        AddMapper(services); 
     }
 
     private static void AddContext(this IServiceCollection services, 
@@ -32,6 +37,16 @@ public static class DependencyInjection
     {
         services.AddScoped<IPostRepository, PostRepository>(); 
         services.AddScoped<ICommentRepository, CommentRepository>(); 
+    }
+
+    private static void AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<IPostService, PostService>();
+    }
+
+    private static void AddMapper(this IServiceCollection services)
+    {
+        services.AddAutoMapper(typeof(MappingProfile)); 
     }
 
 }
