@@ -1,5 +1,6 @@
 using AutoMapper;
 using BlogMVC.Application.Dtos.Post;
+using BlogMVC.Application.Exceptions.BaseExceptions;
 using BlogMVC.Application.Interfaces;
 using BlogMVC.Domain.Entities;
 using BlogMVC.Domain.Interfaces;
@@ -38,7 +39,7 @@ public class PostService : IPostService
         var post = await _repository.GetByIdAsync(id, false); 
         if(post is null)
         {
-            throw new Exception("Postagem não encontrada."); 
+            throw new NotFoundException("Postagem não encontrada."); 
         }
         var response = _mapper.Map<GetPostResponseJson>(post); 
         return response; 

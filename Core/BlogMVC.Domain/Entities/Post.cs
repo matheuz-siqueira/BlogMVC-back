@@ -29,7 +29,7 @@ public sealed class Post : BaseEntity
         DomainExceptionValidation.When(title.Length < 5, "Título precisa ter no mínimo 5 caracteres"); 
         DomainExceptionValidation.When(title.Length > 120, "Título precisa ter no máximo 120 caracteres");
 
-        DomainExceptionValidation.When(string.IsNullOrEmpty(subtitle) && subtitle.Length < 3
+        DomainExceptionValidation.When(!string.IsNullOrEmpty(subtitle) && subtitle.Length < 3
             , "Subtítulo precisa ter no mínimo 3 caracteres");
 
         DomainExceptionValidation.When(subtitle.Length > 120, "Subtítulo precisa ter no máximo 120 caracteres");
