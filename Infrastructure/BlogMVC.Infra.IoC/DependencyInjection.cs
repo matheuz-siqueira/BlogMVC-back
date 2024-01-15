@@ -1,9 +1,12 @@
+using BlogMVC.Application.Dtos.Post;
 using BlogMVC.Application.Interfaces;
 using BlogMVC.Application.Mapping;
 using BlogMVC.Application.Services;
+using BlogMVC.Application.Validators;
 using BlogMVC.Domain.Interfaces;
 using BlogMVC.Infra.Data.Context;
 using BlogMVC.Infra.Data.Repositories;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +22,7 @@ public static class DependencyInjection
         AddRepositories(services); 
         AddServices(services); 
         AddMapper(services); 
+        AddValidators(services); 
     }
 
     private static void AddContext(this IServiceCollection services, 
@@ -47,6 +51,11 @@ public static class DependencyInjection
     private static void AddMapper(this IServiceCollection services)
     {
         services.AddAutoMapper(typeof(MappingProfile)); 
+    }
+
+    private static void AddValidators(this IServiceCollection services)
+    {
+        services.AddScoped<IValidator<CreatePostRequestJson>, CreatePostValidator>(); 
     }
 
 }

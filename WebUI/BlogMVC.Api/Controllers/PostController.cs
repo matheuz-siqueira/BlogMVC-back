@@ -1,5 +1,8 @@
 using BlogMVC.Application.Dtos.Post;
+using BlogMVC.Application.Exceptions.BaseExceptions;
+using BlogMVC.Application.Exceptions.ValidatorsExceptions;
 using BlogMVC.Application.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogMVC.Api.Controllers;
@@ -8,15 +11,22 @@ namespace BlogMVC.Api.Controllers;
 public class PostController : BlogController
 {
     private readonly IPostService _postService; 
-    public PostController(IPostService postService)
+    private readonly IValidator<CreatePostRequestJson> _createPostValidator;
+    public PostController(IPostService postService, IValidator<CreatePostRequestJson> createPostValidator)
     {
         _postService = postService; 
+        _createPostValidator = createPostValidator ;
     }
 
 
     [HttpPost]
     public async Task<ActionResult<GetPostResponseJson>> Create(CreatePostRequestJson request) 
     {
+        var result = _createPostValidator.Validate(request); 
+        if(!result.IsValid)
+        {
+            return BadRequest(result.Errors.ToCustomValidationFailure());
+        }
         var response = await _postService.CreatePostAsync(request); 
         return CreatedAtAction(nameof(GetById), new {id = response.Id}, response);  
     }
@@ -29,7 +39,7 @@ public class PostController : BlogController
             var response = await _postService.GetByIdAsync(id); 
             return Ok(response);  
         }
-        catch(Exception e)
+        catch(NotFoundException e)
         {
             return NotFound(new { message = e.Message }); 
         }
