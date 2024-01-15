@@ -8,5 +8,5 @@ public interface IPostRepository
     Task<Post> GetByIdAsync(int id, bool tracking = true); 
     Task<Post> CreateAsync(Post post); 
     Task UpdateAsync(); 
-    Task RemoveAsync(int id); 
+    Task RemoveAsync(Post post) ; 
 }

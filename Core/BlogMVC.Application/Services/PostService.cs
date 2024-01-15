@@ -44,4 +44,15 @@ public class PostService : IPostService
         var response = _mapper.Map<GetPostResponseJson>(post); 
         return response; 
     }
+
+    public async Task<bool> RemoveAsync(int id)
+    {
+        var post = await _repository.GetByIdAsync(id, false); 
+        if(post is null) 
+        {
+            return false; 
+        }
+        await _repository.RemoveAsync(post);  
+        return true;
+    }
 }
