@@ -60,6 +60,17 @@ public class PostController : BlogController
         return NoContent(); 
     }
 
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<bool>> Update(int id, UpdatePostRequestJson request)
+    {
+        if(id <= 0)
+        {
+            return BadRequest(new { message = "Id inválido"});
+        }
+        var response = await _postService.UpdateAsync(id, request); 
+        return Ok(response); 
+    }
+
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<bool>> Remove(int id)
     {

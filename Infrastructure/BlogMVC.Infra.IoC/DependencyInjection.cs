@@ -55,7 +55,8 @@ public static class DependencyInjection
 
     private static void AddValidators(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<CreatePostRequestJson>, CreatePostValidator>(); 
+        services.AddScoped<IValidator<CreatePostRequestJson>, CreatePostValidator>();
+        services.AddScoped<IValidator<UpdatePostRequestJson>, UpdatePostValidator>();  
     }
 
 }

@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using BlogMVC.Domain.Validation;
 
 namespace BlogMVC.Domain.Entities;
@@ -20,7 +19,7 @@ public sealed class Post : BaseEntity
     public string Subtitle { get; private set; }
     public string Content { get; private set; }
     public DateTime CreatedAt { get; private set; } 
-    public ICollection<Tags> Tags { get; private set; }
+    public IList<Tags> Tags { get; private set; }
     public ICollection<Comment> Comments { get; set; }
 
     private void ValidationDomain(string title, string subtitle, string content)
@@ -36,7 +35,7 @@ public sealed class Post : BaseEntity
     
         DomainExceptionValidation.When(string.IsNullOrEmpty(content), "Contéudo não pode ser vazio"); 
         DomainExceptionValidation.When(content.Length > 2000, "O conteúdo precisa ter no máximo 2000 caracteres"); 
-    
+
         Title = title; 
         Subtitle = subtitle; 
         Content = content;  
@@ -46,8 +45,18 @@ public sealed class Post : BaseEntity
     {
         CreatedAt = DateTime.Now; 
     }
-    public void Update(string title, string subtitle, string content)
+    public void Update(string title, string subtitle, string content, IList<Tags> tags)
     {
         ValidationDomain(title, subtitle, content);
+        
+        if(tags.Any())
+        {
+            foreach(var tag in tags)
+            {
+                Tags.Add(tag); 
+            }
+        }
+        else
+            Tags.Clear(); 
     }
 }
