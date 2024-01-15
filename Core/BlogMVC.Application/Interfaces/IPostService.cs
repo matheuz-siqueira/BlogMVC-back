@@ -8,4 +8,5 @@ public interface IPostService
     Task<IEnumerable<GetPostsResponseJson>> GetAllAsync(); 
     Task<GetPostResponseJson> GetByIdAsync(int id); 
     Task<bool> RemoveAsync(int id); 
+    Task<bool> UpdateAsync(int id, UpdatePostRequestJson request); 
 }

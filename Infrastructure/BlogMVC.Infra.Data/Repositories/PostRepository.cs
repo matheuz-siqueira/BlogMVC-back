@@ -24,7 +24,7 @@ public class PostRepository : IPostRepository
             ? await _context.Posts
                 .Include(p => p.Comments)
                 .Include(p => p.Tags)
-                .FirstOrDefaultAsync(p => p.Id == id)
+                .FirstOrDefaultAsync(p => p.Id == id) 
             : await _context.Posts.AsNoTracking()
                 .Include(p => p.Comments)
                 .Include(p => p.Tags)

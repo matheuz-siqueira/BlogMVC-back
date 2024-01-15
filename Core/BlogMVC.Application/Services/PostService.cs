@@ -55,4 +55,17 @@ public class PostService : IPostService
         await _repository.RemoveAsync(post);  
         return true;
     }
+
+    public async Task<bool> UpdateAsync(int id, UpdatePostRequestJson request)
+    {
+        var post = await _repository.GetByIdAsync(id, true);
+        if(post is null)
+        {
+            return false; 
+        }
+        var tags = _mapper.Map<IList<Tags>>(request.Tags); 
+        post.Update(request.Title, request.Subtitle, request.Content, tags);
+        await _repository.UpdateAsync(); 
+        return true;  
+    }
 }
