@@ -43,4 +43,17 @@ public class CommentService : ICommentService
         var response = _mapper.Map<GetCommentsResponseJson>(comment); 
         return response;
     }
+
+    public async Task<bool> Update(CreateCommentRequestJson request, int commentId)
+    {
+        var comment = await _commentRepository.GetByIdAsync(commentId, true);
+        if(comment is null)
+        {
+            throw new NotFoundException("Comentário não encontrado"); 
+        }
+        comment.Update(request.Commentary, comment.PostId); 
+        await _commentRepository.UpdateAsync(); 
+        return true; 
+        
+    }
 }

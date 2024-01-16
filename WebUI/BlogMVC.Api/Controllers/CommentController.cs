@@ -58,5 +58,25 @@ public class CommentController : BlogController
         }
          
     }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<bool>> Update(CreateCommentRequestJson request, int id)
+    {
+        var result = _createCommentValidator.Validate(request); 
+        if(!result.IsValid)
+            return BadRequest(result.Errors.ToCustomValidationFailure());
+        if(id < 0)
+            return BadRequest(new {message = "Comentário não encontrado"}); 
+        try 
+        {
+            var response = await _service.Update(request, id); 
+            return Ok(response); 
+        }
+        catch
+        {
+            return BadRequest(false);
+        }
+             
+    }
     
 }
