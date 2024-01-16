@@ -8,5 +8,5 @@ public interface ICommentRepository
     Task<Comment> GetByIdAsync(int id, bool tracking = true);
     Task<Comment> CreateAsync(Comment comment); 
     Task UpdateAsync(); 
-    Task RemoveAsync(int id); 
+    Task RemoveAsync(Comment comment); 
 }

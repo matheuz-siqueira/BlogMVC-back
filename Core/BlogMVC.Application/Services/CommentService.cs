@@ -44,6 +44,16 @@ public class CommentService : ICommentService
         return response;
     }
 
+    public async Task<bool> Remove(int commentId)
+    {
+        var comment = await _commentRepository.GetByIdAsync(commentId, false); 
+        if(comment is null)
+            throw new NotFoundException("Comentário não encontrado"); 
+        
+        await _commentRepository.RemoveAsync(comment); 
+        return true; 
+    }
+
     public async Task<bool> Update(CreateCommentRequestJson request, int commentId)
     {
         var comment = await _commentRepository.GetByIdAsync(commentId, true);

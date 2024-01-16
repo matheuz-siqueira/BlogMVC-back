@@ -34,9 +34,8 @@ public class CommentRepository : ICommentRepository
     {
         await _context.SaveChangesAsync();
     }
-    public async Task RemoveAsync(int id)
+    public async Task RemoveAsync(Comment comment)
     {
-        var comment = GetByIdAsync(id, false); 
         _context.Remove(comment); 
         await _context.SaveChangesAsync(); 
     }
