@@ -1,3 +1,4 @@
+using BlogMVC.Application.Dtos.Comment;
 using BlogMVC.Application.Dtos.Post;
 using BlogMVC.Application.Interfaces;
 using BlogMVC.Application.Mapping;
@@ -46,6 +47,7 @@ public static class DependencyInjection
     private static void AddServices(this IServiceCollection services)
     {
         services.AddScoped<IPostService, PostService>();
+        services.AddScoped<ICommentService, CommentService>();
     }
 
     private static void AddMapper(this IServiceCollection services)
@@ -57,6 +59,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IValidator<CreatePostRequestJson>, CreatePostValidator>();
         services.AddScoped<IValidator<UpdatePostRequestJson>, UpdatePostValidator>();  
+        services.AddScoped<IValidator<CreateCommentRequestJson>, CreateCommentValidator>();
     }
 
 }
