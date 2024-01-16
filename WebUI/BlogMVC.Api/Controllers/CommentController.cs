@@ -78,5 +78,18 @@ public class CommentController : BlogController
         }
              
     }
-    
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult<bool>> Remove(int id)
+    {
+        try
+        {
+            var response = await _service.Remove(id); 
+            return Ok(response); 
+        }
+        catch
+        {
+            return BadRequest(false);
+        }
+    }    
 }
