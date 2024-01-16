@@ -39,5 +39,24 @@ public class CommentController : BlogController
         }
          
     }
+
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<GetCommentsResponseJson>> GetById(int id)
+    {
+        if(id < 0)
+        {
+            return BadRequest(new {message = "Id inválido"}); 
+        }
+        try 
+        {
+            var response = await _service.GetById(id); 
+            return Ok(response);
+        }
+        catch(NotFoundException e)
+        {
+            return NotFound(new { message = e.Message }); 
+        }
+         
+    }
     
 }

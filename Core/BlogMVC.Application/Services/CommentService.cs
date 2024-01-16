@@ -32,4 +32,15 @@ public class CommentService : ICommentService
         var response = _mapper.Map<GetCommentsResponseJson>(comment); 
         return response;  
     }
+
+    public async Task<GetCommentsResponseJson> GetById(int commentId)
+    {
+        var comment = await _commentRepository.GetByIdAsync(commentId); 
+        if(comment is null)
+        {
+            throw new NotFoundException("Comentário não encontrado"); 
+        }
+        var response = _mapper.Map<GetCommentsResponseJson>(comment); 
+        return response;
+    }
 }
