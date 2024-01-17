@@ -25,5 +25,10 @@ public class MappingProfile : Profile
 
     private void EntityToRequest()
     {         
+        CreateMap<User, GetProfileResponseJson>(); 
+        CreateMap<Post, GetPostResponseJson>();
+        CreateMap<Post, GetPostsResponseJson>();  
+        CreateMap<Comment, GetCommentsResponseJson>(); 
+        CreateMap<Tags, GetTagsResponseJson>();
     }
 }

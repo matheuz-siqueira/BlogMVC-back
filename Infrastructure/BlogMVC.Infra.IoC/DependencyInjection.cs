@@ -56,7 +56,9 @@ public static class DependencyInjection
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ILoginService, LoginService>(); 
+        services.AddScoped<IUserLogged, UserLogged>();
         services.AddScoped<TokenService>();
+
     }
 
     private static void AddMapper(this IServiceCollection services)
@@ -71,6 +73,7 @@ public static class DependencyInjection
         services.AddScoped<IValidator<CreateCommentRequestJson>, CreateCommentValidator>();
         services.AddScoped<IValidator<CreateAccountRequestJson>, CreateAccountValidator>();
         services.AddScoped<IValidator<LoginRequestJson>, LoginValidator>();
+        services.AddScoped<IValidator<UpdatePasswordRequestJson>, UpdatePasswordValidator>();
     }
 
 }

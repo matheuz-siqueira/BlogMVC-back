@@ -37,7 +37,7 @@ public class TokenService
         return tokenHanlder.WriteToken(securityToken);
     }
 
-    public void ValidatorToken(string token)
+    public ClaimsPrincipal ValidatorToken(string token)
     {      
         var jwtKey = Encoding.UTF8.GetBytes(_configuration["Token:JwtKey"]);
         var handler = new JwtSecurityTokenHandler();
@@ -51,6 +51,13 @@ public class TokenService
             ValidateAudience = false 
         };
 
-        handler.ValidateToken(token, validators, out _); 
+        var claims =  handler.ValidateToken(token, validators, out _); 
+        return claims;
+    }
+
+    public string GetEmail(string token)
+    {
+        var claims = ValidatorToken(token); 
+        return claims.FindFirst(EmailAlias).Value; 
     }
 }

@@ -22,4 +22,14 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.AsNoTracking().FirstOrDefaultAsync(c => c.Email.Equals(email));  
     }
+
+    public async Task<User> GetByIdAsync(int id)
+    {
+        return await _context.Users.FirstOrDefaultAsync(c => c.Id == id);
+    }
+
+    public void UpdatePasswordAsync(User user)
+    {
+        _context.Users.Update(user);        
+    }
 }
