@@ -33,7 +33,7 @@ public class CommentController : BlogController
             var response = await _service.Create(request, id); 
             return StatusCode(201, response);
         }
-        catch(NotFoundException e)
+        catch(BlogException e)
         {
             return NotFound(new { message = e.Message }); 
         }
@@ -52,7 +52,7 @@ public class CommentController : BlogController
             var response = await _service.GetById(id); 
             return Ok(response);
         }
-        catch(NotFoundException e)
+        catch(BlogException e)
         {
             return NotFound(new { message = e.Message }); 
         }

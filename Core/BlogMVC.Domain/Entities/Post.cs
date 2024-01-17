@@ -21,6 +21,8 @@ public sealed class Post : BaseEntity
     public DateTime CreatedAt { get; private set; } 
     public IList<Tags> Tags { get; private set; }
     public ICollection<Comment> Comments { get; set; }
+    public int UserId { get; set; }
+    public User User { get; set; }
 
     private void ValidationDomain(string title, string subtitle, string content)
     {

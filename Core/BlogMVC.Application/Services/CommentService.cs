@@ -25,7 +25,7 @@ public class CommentService : ICommentService
         var post = await _postRepository.GetByIdAsync(postId, false); 
         if(post is null)
         {
-            throw new NotFoundException("Post não encontrado"); 
+            throw new BlogException("Post não encontrado"); 
         }        
         var comment = new Comment(request.Commentary, postId);
         await _commentRepository.CreateAsync(comment); 
@@ -38,7 +38,7 @@ public class CommentService : ICommentService
         var comment = await _commentRepository.GetByIdAsync(commentId); 
         if(comment is null)
         {
-            throw new NotFoundException("Comentário não encontrado"); 
+            throw new BlogException("Comentário não encontrado"); 
         }
         var response = _mapper.Map<GetCommentsResponseJson>(comment); 
         return response;
@@ -48,7 +48,7 @@ public class CommentService : ICommentService
     {
         var comment = await _commentRepository.GetByIdAsync(commentId, false); 
         if(comment is null)
-            throw new NotFoundException("Comentário não encontrado"); 
+            throw new BlogException("Comentário não encontrado"); 
         
         await _commentRepository.RemoveAsync(comment); 
         return true; 
@@ -59,7 +59,7 @@ public class CommentService : ICommentService
         var comment = await _commentRepository.GetByIdAsync(commentId, true);
         if(comment is null)
         {
-            throw new NotFoundException("Comentário não encontrado"); 
+            throw new BlogException("Comentário não encontrado"); 
         }
         comment.Update(request.Commentary, comment.PostId); 
         await _commentRepository.UpdateAsync(); 
