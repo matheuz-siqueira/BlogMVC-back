@@ -27,11 +27,10 @@ public class UserController : BlogController
         {
             return BadRequest(result.Errors.ToCustomValidationFailure()); 
         }
-        
         try 
         {
             var response = await _userService.CreateAccount(request); 
-            return StatusCode(201, response);
+            return Created("", response);
         }
         catch(BlogException e)
         {
