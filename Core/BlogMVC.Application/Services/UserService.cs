@@ -13,13 +13,16 @@ public class UserService : IUserService
     private readonly IMapper _mapper;
     private readonly IUnityOfWork _unityOfWork;
     private readonly TokenService _tokenService;
+    private readonly IUserLogged _userLogged;
     public UserService(IUserRepository repository, 
-        IMapper mapper, IUnityOfWork unityOfWork, TokenService tokenService)
+        IMapper mapper, IUnityOfWork unityOfWork, 
+        TokenService tokenService, IUserLogged userLogged)
     {
         _repository = repository;
         _mapper = mapper; 
         _unityOfWork = unityOfWork; 
         _tokenService = tokenService; 
+        _userLogged = userLogged; 
     }
     public async Task<TokenResponseJson> CreateAccount(CreateAccountRequestJson request)
     {
@@ -40,5 +43,18 @@ public class UserService : IUserService
             Token = token 
         }; 
         return resposne;
+    }
+
+    public async Task UpdatePassword(UpdatePasswordRequestJson request)
+    {
+        var logged = await _userLogged.GetUser();
+        var user = await _repository.GetByIdAsync(logged.Id);
+        if(!BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Password))
+        {
+            throw new IncorretPasswordException(); 
+        }
+        user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        _repository.UpdatePasswordAsync(user);         
+        await _unityOfWork.Commit();
     }
 }
