@@ -23,8 +23,8 @@ public class UserService : IUserService
     }
     public async Task<TokenResponseJson> CreateAccount(CreateAccountRequestJson request)
     {
-        var existing = await _repository.GetEmailAsync(request.Email); 
-        if(existing)
+        var existing = await _repository.GetByEmailAsync(request.Email); 
+        if(existing is null)
         {
             throw new BlogException("Usuáiro já existe"); 
         }

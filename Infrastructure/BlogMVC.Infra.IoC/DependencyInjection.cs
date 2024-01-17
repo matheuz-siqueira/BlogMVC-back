@@ -1,3 +1,5 @@
+using BlogMVC.Application.Authentication;
+using BlogMVC.Application.Dtos.Auth;
 using BlogMVC.Application.Dtos.Comment;
 using BlogMVC.Application.Dtos.Post;
 using BlogMVC.Application.Dtos.User;
@@ -53,6 +55,7 @@ public static class DependencyInjection
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ILoginService, LoginService>(); 
         services.AddScoped<TokenService>();
     }
 
@@ -67,6 +70,7 @@ public static class DependencyInjection
         services.AddScoped<IValidator<UpdatePostRequestJson>, UpdatePostValidator>();  
         services.AddScoped<IValidator<CreateCommentRequestJson>, CreateCommentValidator>();
         services.AddScoped<IValidator<CreateAccountRequestJson>, CreateAccountValidator>();
+        services.AddScoped<IValidator<LoginRequestJson>, LoginValidator>();
     }
 
 }

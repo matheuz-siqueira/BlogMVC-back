@@ -18,8 +18,8 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync(); 
     }
 
-    public async Task<bool> GetEmailAsync(string email)
+    public async Task<User> GetByEmailAsync(string email)
     {
-        return await _context.Users.AnyAsync(c => c.Email.Equals(email)); 
+        return await _context.Users.AsNoTracking().FirstOrDefaultAsync(c => c.Email.Equals(email));  
     }
 }
