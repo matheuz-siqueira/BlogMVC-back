@@ -1,8 +1,10 @@
 using BlogMVC.Application.Dtos.Comment;
 using BlogMVC.Application.Dtos.Post;
+using BlogMVC.Application.Dtos.User;
 using BlogMVC.Application.Interfaces;
 using BlogMVC.Application.Mapping;
 using BlogMVC.Application.Services;
+using BlogMVC.Application.Token;
 using BlogMVC.Application.Validators;
 using BlogMVC.Domain.Interfaces;
 using BlogMVC.Infra.Data.Context;
@@ -40,6 +42,8 @@ public static class DependencyInjection
 
     private static void AddRepositories(this IServiceCollection services)
     {
+        services.AddScoped<IUnityOfWork, UnityOfWork>(); 
+        services.AddScoped<IUserRepository, UserRepository>(); 
         services.AddScoped<IPostRepository, PostRepository>(); 
         services.AddScoped<ICommentRepository, CommentRepository>(); 
     }
@@ -48,6 +52,8 @@ public static class DependencyInjection
     {
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<TokenService>();
     }
 
     private static void AddMapper(this IServiceCollection services)
@@ -60,6 +66,7 @@ public static class DependencyInjection
         services.AddScoped<IValidator<CreatePostRequestJson>, CreatePostValidator>();
         services.AddScoped<IValidator<UpdatePostRequestJson>, UpdatePostValidator>();  
         services.AddScoped<IValidator<CreateCommentRequestJson>, CreateCommentValidator>();
+        services.AddScoped<IValidator<CreateAccountRequestJson>, CreateAccountValidator>();
     }
 
 }

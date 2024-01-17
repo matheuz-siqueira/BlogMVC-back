@@ -43,7 +43,7 @@ public class PostController : BlogController
             var response = await _postService.GetByIdAsync(id); 
             return Ok(response);  
         }
-        catch(NotFoundException e)
+        catch(BlogException e)
         {
             return NotFound(new { message = e.Message }); 
         }

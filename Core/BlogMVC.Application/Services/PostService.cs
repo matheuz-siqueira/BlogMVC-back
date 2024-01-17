@@ -39,7 +39,7 @@ public class PostService : IPostService
         var post = await _repository.GetByIdAsync(id, false); 
         if(post is null)
         {
-            throw new NotFoundException("Postagem não encontrada."); 
+            throw new BlogException("Postagem não encontrada."); 
         }
         var response = _mapper.Map<GetPostResponseJson>(post); 
         return response; 
