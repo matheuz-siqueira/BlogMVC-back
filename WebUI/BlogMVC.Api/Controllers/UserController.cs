@@ -24,6 +24,7 @@ public class UserController : BlogController
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(TokenResponseJson), StatusCodes.Status201Created)]
     public async Task<ActionResult<TokenResponseJson>> Register(
         CreateAccountRequestJson request)
     {
@@ -33,12 +34,21 @@ public class UserController : BlogController
         try 
         {
             var response = await _userService.CreateAccount(request); 
-            return Created("", response);
+            return Created(string.Empty, response);
         }
         catch(BlogException e)
         {
             return BadRequest(new {message = e.Message });
         }
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(GetProfileResponseJson), StatusCodes.Status200OK)]
+    [ServiceFilter(typeof(AuthenticatedUserAttribute))]
+    public async Task<ActionResult> GetProfile()
+    {
+        var response = await _userService.GetProfile(); 
+        return Ok(response);
     }
 
     [HttpPut("update-password")]

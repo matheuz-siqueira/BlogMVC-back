@@ -5,6 +5,7 @@ using BlogMVC.Application.Interfaces;
 using BlogMVC.Application.Token;
 using BlogMVC.Domain.Entities;
 using BlogMVC.Domain.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BlogMVC.Application.Services;
 public class UserService : IUserService
@@ -43,6 +44,13 @@ public class UserService : IUserService
             Token = token 
         }; 
         return resposne;
+    }
+
+    public async Task<GetProfileResponseJson> GetProfile()
+    { 
+        var user = await _userLogged.GetUser();
+        var response = _mapper.Map<GetProfileResponseJson>(user);
+        return response;
     }
 
     public async Task UpdatePassword(UpdatePasswordRequestJson request)
