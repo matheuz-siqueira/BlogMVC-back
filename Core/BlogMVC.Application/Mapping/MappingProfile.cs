@@ -18,6 +18,7 @@ public class MappingProfile : Profile
     private void RequestToEntity()
     {
         CreateMap<CreatePostRequestJson, Post>();
+        CreateMap<UpdatePostRequestJson, Post>();
         CreateMap<CreateCommentRequestJson, Comment>(); 
         CreateMap<CreateTagRequestJson, Tags>();
         CreateMap<CreateAccountRequestJson, User>();  

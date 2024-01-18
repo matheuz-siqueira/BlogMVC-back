@@ -1,3 +1,4 @@
+using BlogMVC.Api.Filter;
 using BlogMVC.Application.Dtos.Post;
 using BlogMVC.Application.Exceptions.BaseExceptions;
 using BlogMVC.Application.Exceptions.ValidatorsExceptions;
@@ -20,7 +21,9 @@ public class PostController : BlogController
 
 
     [HttpPost]
-    public async Task<ActionResult<GetPostResponseJson>> Create(CreatePostRequestJson request) 
+    [ProducesResponseType(typeof(GetPostResponseJson), StatusCodes.Status201Created)]
+    [ServiceFilter(typeof(AuthenticatedUserAttribute))]
+    public async Task<ActionResult> Create(CreatePostRequestJson request) 
     {
         var result = _createPostValidator.Validate(request); 
         if(!result.IsValid)
