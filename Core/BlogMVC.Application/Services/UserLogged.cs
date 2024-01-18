@@ -18,6 +18,7 @@ public class UserLogged : IUserLogged
         _tokenService = tokenService; 
         _userRepository = userRepository;
     }
+
     public async Task<User> GetUser()
     {
         var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();

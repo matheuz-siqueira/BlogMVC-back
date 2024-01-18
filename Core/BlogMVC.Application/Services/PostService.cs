@@ -12,17 +12,30 @@ public class PostService : IPostService
 
     private readonly IPostRepository _repository;
     private IMapper _mapper;
-    public PostService(IPostRepository repository, IMapper mapper)
+    private IUnityOfWork _unityOfWork;
+    private IUserLogged _userLogged;
+    public PostService(IPostRepository repository, IMapper mapper, 
+        IUnityOfWork unityOfWork, IUserLogged userLogged)
     {
         _repository = repository; 
-        _mapper = mapper; 
+        _mapper = mapper;
+        _unityOfWork = unityOfWork;  
+        _userLogged = userLogged;
     }
 
     public async Task<GetPostResponseJson> CreatePostAsync(CreatePostRequestJson request)
     {
         var model = _mapper.Map<Post>(request); 
-        model.AddDate(); 
+        model.CreatedAt = DateTime.Now; 
+        if(request.Tags.Any())
+        {
+            var tags = _mapper.Map<IEnumerable<Tags>>(request.Tags); 
+            model.Tags = (IList<Tags>)tags;
+        } 
+        var user = await _userLogged.GetUser(); 
+        model.UserId = user.Id; 
         await _repository.CreateAsync(model); 
+        await _unityOfWork.Commit(); 
         var response = _mapper.Map<GetPostResponseJson>(model); 
         return response; 
     }
@@ -53,6 +66,7 @@ public class PostService : IPostService
             return false; 
         }
         await _repository.RemoveAsync(post);  
+        await _unityOfWork.Commit();
         return true;
     }
 
@@ -61,11 +75,11 @@ public class PostService : IPostService
         var post = await _repository.GetByIdAsync(id, true);
         if(post is null)
         {
-            return false; 
-        }
-        var tags = _mapper.Map<IList<Tags>>(request.Tags); 
-        post.Update(request.Title, request.Subtitle, request.Content, tags);
+            throw new NotFoundException(); 
+        } 
+        _mapper.Map(request, post); 
         await _repository.UpdateAsync(); 
+        await _unityOfWork.Commit(); 
         return true;  
     }
 }

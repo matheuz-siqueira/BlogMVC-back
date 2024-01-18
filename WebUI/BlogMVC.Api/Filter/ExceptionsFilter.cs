@@ -43,6 +43,12 @@ public class ExceptionsFilter : IExceptionFilter
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest; 
         context.Result = new ObjectResult(new ErrorResponseJson(error.Message));
     }
+    private void HandlerNotFoundException(ExceptionContext context)
+    {
+        var error = context.Exception as NotFoundException; 
+        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound; 
+        context.Result = new ObjectResult(new ErrorResponseJson(error.Message)); 
+    }
 
     private void HandlerUnknowError(ExceptionContext context)
     {
