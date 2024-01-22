@@ -66,14 +66,24 @@ public class PostController : BlogController
     }
 
     [HttpPut("{id:int}")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ServiceFilter(typeof(AuthenticatedUserAttribute))]
     public async Task<ActionResult<bool>> Update(int id, UpdatePostRequestJson request)
     {
         if(id <= 0)
         {
             return BadRequest(new { message = "Id inválido"});
         }
-        var response = await _postService.UpdateAsync(id, request); 
-        return Ok(response); 
+        try 
+        {
+            var response = await _postService.UpdateAsync(id, request); 
+            return Ok(response);
+        }
+        catch
+        {
+            return Ok(false); 
+        }
+         
     }
 
     [HttpDelete("{id:int}")]

@@ -22,10 +22,6 @@ public class CreatePostValidator : AbstractValidator<CreatePostRequestJson>
 
     private bool SubtitleValidate(string subtitle)
     {
-        if(string.IsNullOrEmpty(subtitle))
-        {
-            return (subtitle.Length < 3); 
-        }
-        return false; 
+        return !string.IsNullOrWhiteSpace(subtitle);
     }
 }
