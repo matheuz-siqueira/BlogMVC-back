@@ -60,8 +60,9 @@ public class PostService : IPostService
 
     public async Task<bool> RemoveAsync(int id)
     {
+        var user = await _userLogged.GetUser(); 
         var post = await _repository.GetByIdAsync(id); 
-        if(post is null) 
+        if((post is null) || post.UserId != user.Id) 
         {
             return false; 
         }
