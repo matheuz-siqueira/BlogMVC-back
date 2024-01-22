@@ -22,7 +22,7 @@ public class CommentService : ICommentService
     }
     public async Task<GetCommentsResponseJson> Create(CreateCommentRequestJson request, int postId)
     {
-        var post = await _postRepository.GetByIdAsync(postId, false); 
+        var post = await _postRepository.GetByIdAsync(postId);  
         if(post is null)
         {
             throw new BlogException("Post não encontrado"); 

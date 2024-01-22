@@ -18,16 +18,9 @@ public class PostRepository : IPostRepository
             .Include(p => p.Tags)
             .ToListAsync(); 
     }
-    public async Task<Post> GetByIdAsync(int id, bool tracking = true)
+    public async Task<Post> GetByIdAsync(int id)
     {
-        return (tracking)
-            ? await _context.Posts
-                .Include(p => p.Comments)
-                .Include(p => p.Tags)
-                .FirstOrDefaultAsync(p => p.Id == id) 
-            : await _context.Posts.AsNoTracking()
-                .Include(p => p.Comments)
-                .Include(p => p.Tags)
+        return  await _context.Posts.AsNoTracking().Include(p => p.Comments).Include(p => p.Tags)
                 .FirstOrDefaultAsync(p => p.Id == id); 
     }
 
@@ -45,5 +38,11 @@ public class PostRepository : IPostRepository
     {
         _context.Remove(post); 
         await _context.SaveChangesAsync(); 
+    }
+
+    public async Task<Post> GetByIdTrackingAsync(int id, int userId)
+    {
+        return await _context.Posts.Where(c => c.UserId == userId)
+        .FirstOrDefaultAsync(p => p.Id == id); 
     }
 }
