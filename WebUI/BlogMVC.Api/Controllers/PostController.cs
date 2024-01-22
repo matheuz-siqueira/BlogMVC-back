@@ -54,6 +54,7 @@ public class PostController : BlogController
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(GetPostResponseJson), StatusCodes.Status200OK)]
     public async Task<ActionResult<GetPostsResponseJson>> GetAll()
     {
         var response = await _postService.GetAllAsync(); 
@@ -76,6 +77,8 @@ public class PostController : BlogController
     }
 
     [HttpDelete("{id:int}")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ServiceFilter(typeof(AuthenticatedUserAttribute))]
     public async Task<ActionResult<bool>> Remove(int id)
     {
         var response = await _postService.RemoveAsync(id); 
