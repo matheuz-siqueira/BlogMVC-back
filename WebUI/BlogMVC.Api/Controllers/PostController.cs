@@ -35,7 +35,8 @@ public class PostController : BlogController
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<GetPostResponseJson>> GetById(int id) 
+    [ProducesResponseType(typeof(GetPostResponseJson), StatusCodes.Status200OK)]
+    public async Task<ActionResult> GetById(int id) 
     {
         if(id <= 0) 
         {

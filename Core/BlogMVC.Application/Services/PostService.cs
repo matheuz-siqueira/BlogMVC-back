@@ -49,10 +49,10 @@ public class PostService : IPostService
 
     public async Task<GetPostResponseJson> GetByIdAsync(int id)
     {
-        var post = await _repository.GetByIdAsync(id, false); 
+        var post = await _repository.GetByIdAsync(id); 
         if(post is null)
         {
-            throw new BlogException("Postagem não encontrada."); 
+            throw new NotFoundException(); 
         }
         var response = _mapper.Map<GetPostResponseJson>(post); 
         return response; 
@@ -60,7 +60,7 @@ public class PostService : IPostService
 
     public async Task<bool> RemoveAsync(int id)
     {
-        var post = await _repository.GetByIdAsync(id, false); 
+        var post = await _repository.GetByIdAsync(id); 
         if(post is null) 
         {
             return false; 
@@ -72,7 +72,8 @@ public class PostService : IPostService
 
     public async Task<bool> UpdateAsync(int id, UpdatePostRequestJson request)
     {
-        var post = await _repository.GetByIdAsync(id, true);
+        var user = await _userLogged.GetUser();
+        var post = await _repository.GetByIdTrackingAsync(id, user.Id); 
         if(post is null)
         {
             throw new NotFoundException(); 
