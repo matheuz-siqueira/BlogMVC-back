@@ -84,6 +84,8 @@ public class CommentController : BlogController
     }
 
     [HttpDelete("{id:int}")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ServiceFilter(typeof(AuthenticatedUserAttribute))]
     public async Task<ActionResult<bool>> Remove(int id)
     {
         try
