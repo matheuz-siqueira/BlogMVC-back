@@ -1,3 +1,4 @@
+using BlogMVC.Api.Filter;
 using BlogMVC.Application.Dtos.Comment;
 using BlogMVC.Application.Exceptions.BaseExceptions;
 using BlogMVC.Application.Exceptions.ValidatorsExceptions;
@@ -20,6 +21,8 @@ public class CommentController : BlogController
     }
 
     [HttpPost("{id:int}")]
+    [ProducesResponseType(typeof(GetCommentsResponseJson), StatusCodes.Status201Created)]
+    [ServiceFilter(typeof(AuthenticatedUserAttribute))]
     public async Task<ActionResult<GetCommentsResponseJson>> Create(
             CreateCommentRequestJson request, int id)
     {
@@ -33,7 +36,7 @@ public class CommentController : BlogController
             var response = await _service.Create(request, id); 
             return StatusCode(201, response);
         }
-        catch(BlogException e)
+        catch(NotFoundException e)
         {
             return NotFound(new { message = e.Message }); 
         }

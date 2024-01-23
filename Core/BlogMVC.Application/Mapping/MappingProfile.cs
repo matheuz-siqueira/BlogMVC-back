@@ -12,7 +12,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         RequestToEntity(); 
-        EntityToRequest(); 
+        EntityToResponse(); 
     }
 
     private void RequestToEntity()
@@ -23,7 +23,7 @@ public class MappingProfile : Profile
         CreateMap<CreateAccountRequestJson, User>();  
     }
 
-    private void EntityToRequest()
+    private void EntityToResponse()
     {         
         CreateMap<User, GetProfileResponseJson>(); 
         CreateMap<Post, GetPostResponseJson>();

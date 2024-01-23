@@ -11,25 +11,31 @@ public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
     private readonly IPostRepository _postRepository;
+    private readonly IUserLogged _userLogged;
     private readonly IMapper _mapper;
     public CommentService(ICommentRepository commentRepository, 
         IPostRepository postRepository, 
-        IMapper mapper)
+        IMapper mapper, IUserLogged userLogged)
     {
         _commentRepository = commentRepository; 
         _postRepository = postRepository;
         _mapper = mapper; 
+        _userLogged = userLogged;
     }
     public async Task<GetCommentsResponseJson> Create(CreateCommentRequestJson request, int postId)
     {
         var post = await _postRepository.GetByIdAsync(postId);  
+        var user = await _userLogged.GetUser();
         if(post is null)
         {
-            throw new BlogException("Post não encontrado"); 
+            throw new NotFoundException(); 
         }        
-        var comment = new Comment(request.Commentary, postId);
+        var comment = _mapper.Map<Comment>(request); 
+        comment.PostId = post.Id; 
+        comment.UserId = user.Id;
         await _commentRepository.CreateAsync(comment); 
-        var response = _mapper.Map<GetCommentsResponseJson>(comment); 
+        var response = _mapper.Map<GetCommentsResponseJson>(comment);
+        response.User = user.Name;   
         return response;  
     }
 
@@ -60,8 +66,7 @@ public class CommentService : ICommentService
         if(comment is null)
         {
             throw new BlogException("Comentário não encontrado"); 
-        }
-        comment.Update(request.Commentary, comment.PostId); 
+        } 
         await _commentRepository.UpdateAsync(); 
         return true; 
         
