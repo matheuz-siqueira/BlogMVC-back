@@ -15,12 +15,11 @@ public class PostRepository : IPostRepository
     public async Task<IEnumerable<Post>> GetAllAsync()
     {
         return await _context.Posts.AsNoTracking()
-            .Include(p => p.Tags)
             .ToListAsync(); 
     }
     public async Task<Post> GetByIdAsync(int id)
     {
-        return  await _context.Posts.AsNoTracking().Include(p => p.Comments).Include(p => p.Tags)
+        return  await _context.Posts.AsNoTracking().Include(p => p.Comments)
                 .FirstOrDefaultAsync(p => p.Id == id); 
     }
 

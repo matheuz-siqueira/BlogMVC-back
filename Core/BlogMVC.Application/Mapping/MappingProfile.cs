@@ -20,7 +20,6 @@ public class MappingProfile : Profile
         CreateMap<CreatePostRequestJson, Post>();
         CreateMap<UpdatePostRequestJson, Post>();
         CreateMap<CreateCommentRequestJson, Comment>(); 
-        CreateMap<CreateTagRequestJson, Tags>();
         CreateMap<CreateAccountRequestJson, User>();  
     }
 
@@ -30,6 +29,5 @@ public class MappingProfile : Profile
         CreateMap<Post, GetPostResponseJson>();
         CreateMap<Post, GetPostsResponseJson>();  
         CreateMap<Comment, GetCommentsResponseJson>(); 
-        CreateMap<Tags, GetTagsResponseJson>();
     }
 }

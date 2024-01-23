@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogMVC.Infra.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240110180700_Initial")]
-    partial class Initial
+    [Migration("20240123142654_UpdateDatabase")]
+    partial class UpdateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,9 +34,14 @@ namespace BlogMVC.Infra.Data.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -64,30 +69,47 @@ namespace BlogMVC.Infra.Data.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("varchar(120)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("BlogMVC.Domain.Entities.Tags", b =>
+            modelBuilder.Entity("BlogMVC.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Tag")
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("varchar(12)");
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
-
-                    b.ToTable("Tags");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("BlogMVC.Domain.Entities.Comment", b =>
@@ -98,25 +120,36 @@ namespace BlogMVC.Infra.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("BlogMVC.Domain.Entities.Tags", b =>
-                {
-                    b.HasOne("BlogMVC.Domain.Entities.Post", "Post")
-                        .WithMany("Tags")
-                        .HasForeignKey("PostId")
+                    b.HasOne("BlogMVC.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BlogMVC.Domain.Entities.Post", b =>
+                {
+                    b.HasOne("BlogMVC.Domain.Entities.User", "User")
+                        .WithMany("Post")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BlogMVC.Domain.Entities.Post", b =>
                 {
                     b.Navigation("Comments");
+                });
 
-                    b.Navigation("Tags");
+            modelBuilder.Entity("BlogMVC.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Post");
                 });
 #pragma warning restore 612, 618
         }

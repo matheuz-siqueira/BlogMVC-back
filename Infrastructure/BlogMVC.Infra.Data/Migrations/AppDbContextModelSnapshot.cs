@@ -32,9 +32,14 @@ namespace BlogMVC.Infra.Data.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -70,27 +75,6 @@ namespace BlogMVC.Infra.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Posts");
-                });
-
-            modelBuilder.Entity("BlogMVC.Domain.Entities.Tags", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Tag")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("varchar(12)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("BlogMVC.Domain.Entities.User", b =>
@@ -134,7 +118,15 @@ namespace BlogMVC.Infra.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BlogMVC.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BlogMVC.Domain.Entities.Post", b =>
@@ -148,22 +140,9 @@ namespace BlogMVC.Infra.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BlogMVC.Domain.Entities.Tags", b =>
-                {
-                    b.HasOne("BlogMVC.Domain.Entities.Post", "Post")
-                        .WithMany("Tags")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("BlogMVC.Domain.Entities.Post", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("BlogMVC.Domain.Entities.User", b =>
