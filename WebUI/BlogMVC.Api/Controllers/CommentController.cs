@@ -44,6 +44,7 @@ public class CommentController : BlogController
     }
 
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(GetCommentsResponseJson), StatusCodes.Status200OK)]
     public async Task<ActionResult<GetCommentsResponseJson>> GetById(int id)
     {
         if(id < 0)
@@ -55,7 +56,7 @@ public class CommentController : BlogController
             var response = await _service.GetById(id); 
             return Ok(response);
         }
-        catch(BlogException e)
+        catch(NotFoundException e)
         {
             return NotFound(new { message = e.Message }); 
         }
