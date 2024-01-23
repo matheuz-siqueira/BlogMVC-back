@@ -17,6 +17,8 @@ public sealed class Comment : BaseEntity
     }
 
     public string Commentary { get; private set; }
+    public User User { get; set; }
+    public int UserId { get; set; }
     public Post Post { get; set; }
     public int PostId { get; private set; }   
 

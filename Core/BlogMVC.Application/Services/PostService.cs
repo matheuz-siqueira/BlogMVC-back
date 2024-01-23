@@ -27,11 +27,6 @@ public class PostService : IPostService
     {
         var model = _mapper.Map<Post>(request); 
         model.CreatedAt = DateTime.Now; 
-        if(request.Tags is not null)
-        {
-            var tags = _mapper.Map<IEnumerable<Tags>>(request.Tags); 
-            model.Tags = (IList<Tags>)tags;
-        } 
         var user = await _userLogged.GetUser(); 
         model.UserId = user.Id; 
         await _repository.CreateAsync(model); 
