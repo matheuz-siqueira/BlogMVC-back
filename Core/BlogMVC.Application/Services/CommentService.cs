@@ -11,16 +11,19 @@ public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
     private readonly IPostRepository _postRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IUserLogged _userLogged;
     private readonly IMapper _mapper;
     public CommentService(ICommentRepository commentRepository, 
         IPostRepository postRepository, 
-        IMapper mapper, IUserLogged userLogged)
+        IMapper mapper, IUserLogged userLogged, 
+        IUserRepository userRepository)
     {
         _commentRepository = commentRepository; 
         _postRepository = postRepository;
         _mapper = mapper; 
         _userLogged = userLogged;
+        _userRepository = userRepository;
     }
     public async Task<GetCommentsResponseJson> Create(CreateCommentRequestJson request, int postId)
     {
@@ -35,7 +38,7 @@ public class CommentService : ICommentService
         comment.UserId = user.Id;
         await _commentRepository.CreateAsync(comment); 
         var response = _mapper.Map<GetCommentsResponseJson>(comment);
-        response.User = user.Name;   
+        response.Author = user.Name;   
         return response;  
     }
 
@@ -43,16 +46,18 @@ public class CommentService : ICommentService
     {
         var comment = await _commentRepository.GetByIdAsync(commentId); 
         if(comment is null)
-        {
-            throw new BlogException("Comentário não encontrado"); 
-        }
-        var response = _mapper.Map<GetCommentsResponseJson>(comment); 
+            throw new NotFoundException(); 
+
+        var response = _mapper.Map<GetCommentsResponseJson>(comment);
+        var user = await _userRepository.GetByIdAsync(response.UserId);  
+        response.Author = user.Name;  
         return response;
+
     }
 
     public async Task<bool> Remove(int commentId)
     {
-        var comment = await _commentRepository.GetByIdAsync(commentId, false); 
+        var comment = await _commentRepository.GetByIdAsync(commentId); 
         if(comment is null)
             throw new BlogException("Comentário não encontrado"); 
         
@@ -62,7 +67,7 @@ public class CommentService : ICommentService
 
     public async Task<bool> Update(CreateCommentRequestJson request, int commentId)
     {
-        var comment = await _commentRepository.GetByIdAsync(commentId, true);
+        var comment = await _commentRepository.GetByIdTrackingAsync(commentId);
         if(comment is null)
         {
             throw new BlogException("Comentário não encontrado"); 

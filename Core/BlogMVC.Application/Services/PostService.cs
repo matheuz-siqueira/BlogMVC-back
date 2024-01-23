@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.Execution;
 using BlogMVC.Application.Dtos.Post;
 using BlogMVC.Application.Exceptions.BaseExceptions;
 using BlogMVC.Application.Interfaces;
@@ -11,13 +12,16 @@ public class PostService : IPostService
 {
 
     private readonly IPostRepository _repository;
-    private IMapper _mapper;
-    private IUnityOfWork _unityOfWork;
-    private IUserLogged _userLogged;
+    private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
+    private readonly IUnityOfWork _unityOfWork;
+    private readonly IUserLogged _userLogged;
     public PostService(IPostRepository repository, IMapper mapper, 
-        IUnityOfWork unityOfWork, IUserLogged userLogged)
+        IUnityOfWork unityOfWork, IUserLogged userLogged, 
+        IUserRepository userRepository)
     {
-        _repository = repository; 
+        _repository = repository;
+        _userRepository = userRepository; 
         _mapper = mapper;
         _unityOfWork = unityOfWork;  
         _userLogged = userLogged;
@@ -49,7 +53,12 @@ public class PostService : IPostService
         {
             throw new NotFoundException(); 
         }
-        var response = _mapper.Map<GetPostResponseJson>(post); 
+        var response = _mapper.Map<GetPostResponseJson>(post);
+        foreach(var comment in response.Comments)
+        {
+            var user = await _userRepository.GetByIdAsync(comment.UserId); 
+            comment.Author = user.Name; 
+        }
         return response; 
     }
 

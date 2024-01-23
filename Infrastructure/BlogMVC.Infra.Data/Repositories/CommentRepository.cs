@@ -18,11 +18,9 @@ public class CommentRepository : ICommentRepository
     {
         return await _context.Comments.AsNoTracking().ToListAsync(); 
     }
-    public async Task<Comment> GetByIdAsync(int id, bool tracking = true)
+    public async Task<Comment> GetByIdAsync(int id)
     {
-        return (tracking)    
-            ?  await _context.Comments.FirstOrDefaultAsync(c => c.Id == id) 
-            :  await _context.Comments.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);  
+        return await _context.Comments.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);  
     }
     public async Task<Comment> CreateAsync(Comment comment)
     {
@@ -38,5 +36,10 @@ public class CommentRepository : ICommentRepository
     {
         _context.Remove(comment); 
         await _context.SaveChangesAsync(); 
+    }
+
+    public async Task<Comment> GetByIdTrackingAsync(int id)
+    {
+        return await _context.Comments.FirstOrDefaultAsync(c => c.Id == id);
     }
 }
