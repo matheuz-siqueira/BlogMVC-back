@@ -73,11 +73,13 @@ public class CommentService : ICommentService
     public async Task<bool> Update(CreateCommentRequestJson request, int commentId)
     {
         var comment = await _commentRepository.GetByIdTrackingAsync(commentId);
-        if(comment is null)
+        var user = await _userLogged.GetUser(); 
+        if((comment is null) || comment.UserId != user.Id)
         {
-            throw new BlogException("Comentário não encontrado"); 
+            throw new NotFoundException(); 
         } 
         await _commentRepository.UpdateAsync(); 
+        await _unityOfWork.Commit(); 
         return true; 
         
     }

@@ -64,6 +64,8 @@ public class CommentController : BlogController
     }
 
     [HttpPut("{id:int}")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ServiceFilter(typeof(AuthenticatedUserAttribute))]
     public async Task<ActionResult<bool>> Update(CreateCommentRequestJson request, int id)
     {
         var result = _createCommentValidator.Validate(request); 
