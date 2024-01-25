@@ -1,11 +1,13 @@
 using BlogMVC.Application.Dtos.Post;
+using BlogMVC.Domain.Entities;
+using BlogMVC.Domain.Pagination;
 
 namespace BlogMVC.Application.Interfaces;
 
 public interface IPostService
 {
     Task<GetPostResponseJson> CreatePostAsync(CreatePostRequestJson request);
-    Task<IEnumerable<GetPostsResponseJson>> GetAllAsync(); 
+    PagedList<Post> GetAll(PaginationParameters parameters); 
     Task<GetPostResponseJson> GetByIdAsync(int id); 
     Task<bool> RemoveAsync(int id); 
     Task<bool> UpdateAsync(int id, UpdatePostRequestJson request); 

@@ -1,5 +1,6 @@
 using BlogMVC.Domain.Entities;
 using BlogMVC.Domain.Interfaces;
+using BlogMVC.Domain.Pagination;
 using BlogMVC.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,11 +12,6 @@ public class PostRepository : IPostRepository
     public PostRepository(AppDbContext context)
     {
         _context = context; 
-    }
-    public async Task<IEnumerable<Post>> GetAllAsync()
-    {
-        return await _context.Posts.AsNoTracking()
-            .ToListAsync(); 
     }
     public async Task<Post> GetByIdAsync(int id)
     {
@@ -43,5 +39,16 @@ public class PostRepository : IPostRepository
     {
         return await _context.Posts.Where(c => c.UserId == userId)
         .FirstOrDefaultAsync(p => p.Id == id); 
+    }
+
+    public PagedList<Post> GetAll(PaginationParameters parameters)
+    {
+        // return await _context.Posts.AsNoTracking() 
+        //     .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+        //     .Take(parameters.PageSize)
+        //     .ToListAsync(); 
+        var posts = _context.Set<Post>().ToList();   
+        return PagedList<Post>
+            .ToPagedList(posts, parameters.PageNumber, parameters.PageSize); 
     }
 }
