@@ -1,8 +1,13 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using AutoMapper;
 using BlogMVC.Api.Filter;
 using BlogMVC.Application.Dtos.Post;
 using BlogMVC.Application.Exceptions.BaseExceptions;
 using BlogMVC.Application.Exceptions.ValidatorsExceptions;
 using BlogMVC.Application.Interfaces;
+using BlogMVC.Domain.Entities;
+using BlogMVC.Domain.Pagination;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,15 +59,28 @@ public class PostController : BlogController
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(GetPostResponseJson), StatusCodes.Status200OK)]
-    public async Task<ActionResult<GetPostsResponseJson>> GetAll()
+    [ProducesResponseType(typeof(PagedList<Post>), StatusCodes.Status200OK)]
+    public ActionResult GetAll([FromQuery] PaginationParameters parameters, 
+        [FromServices] IMapper _mapper)
     {
-        var response = await _postService.GetAllAsync(); 
-        if(response.Any())
+        var posts = _postService.GetAll(parameters); 
+        if(!posts.Any())
+            return NoContent();
+
+        var metadata = new 
         {
-            return Ok(response); 
-        }
-        return NoContent(); 
+            posts.TotalCount, 
+            posts.PageSize, 
+            posts.CurrentPage, 
+            posts.TotalPages,
+            posts.HasNext, 
+            posts.HasPrevious
+        };
+        
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
+        var response = _mapper.Map<List<GetPostResponseJson>>(posts); 
+        return Ok(response); 
+
     }
 
     [HttpPut("{id:int}")]

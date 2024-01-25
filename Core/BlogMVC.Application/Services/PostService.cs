@@ -5,6 +5,7 @@ using BlogMVC.Application.Exceptions.BaseExceptions;
 using BlogMVC.Application.Interfaces;
 using BlogMVC.Domain.Entities;
 using BlogMVC.Domain.Interfaces;
+using BlogMVC.Domain.Pagination;
 
 namespace BlogMVC.Application.Services;
 
@@ -39,11 +40,9 @@ public class PostService : IPostService
         return response; 
     }
 
-    public async Task<IEnumerable<GetPostsResponseJson>> GetAllAsync()
+    public PagedList<Post> GetAll(PaginationParameters parameters)
     {
-        var posts = await _repository.GetAllAsync(); 
-        var response = _mapper.Map<IEnumerable<GetPostsResponseJson>>(posts);
-        return response;  
+        return _repository.GetAll(parameters);  
     }
 
     public async Task<GetPostResponseJson> GetByIdAsync(int id)
