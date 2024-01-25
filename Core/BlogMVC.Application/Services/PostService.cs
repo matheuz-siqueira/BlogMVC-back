@@ -44,6 +44,14 @@ public class PostService : IPostService
     {
         return _repository.GetAll(parameters);  
     }
+    
+    public async Task<IEnumerable<GetPostResponseJson>> GetAllOfUser()
+    {
+        var user = await _userLogged.GetUser(); 
+        var posts = await _repository.GetAllOfUser(user.Id); 
+        var response = _mapper.Map<IEnumerable<GetPostResponseJson>>(posts); 
+        return response;
+    }
 
     public async Task<GetPostResponseJson> GetByIdAsync(int id)
     {
@@ -60,20 +68,6 @@ public class PostService : IPostService
         }
         return response; 
     }
-
-    public async Task<bool> RemoveAsync(int id)
-    {
-        var user = await _userLogged.GetUser(); 
-        var post = await _repository.GetByIdAsync(id); 
-        if((post is null) || post.UserId != user.Id) 
-        {
-            return false; 
-        }
-        await _repository.RemoveAsync(post);  
-        await _unityOfWork.Commit();
-        return true;
-    }
-
     public async Task<bool> UpdateAsync(int id, UpdatePostRequestJson request)
     {
         var user = await _userLogged.GetUser();
@@ -86,5 +80,18 @@ public class PostService : IPostService
         await _repository.UpdateAsync(); 
         await _unityOfWork.Commit(); 
         return true;  
+    }
+
+    public async Task<bool> RemoveAsync(int id)
+    {
+        var user = await _userLogged.GetUser(); 
+        var post = await _repository.GetByIdAsync(id); 
+        if((post is null) || post.UserId != user.Id) 
+        {
+            return false; 
+        }
+        await _repository.RemoveAsync(post);  
+        await _unityOfWork.Commit();
+        return true;
     }
 }

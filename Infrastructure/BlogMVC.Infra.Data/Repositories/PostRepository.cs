@@ -13,12 +13,27 @@ public class PostRepository : IPostRepository
     {
         _context = context; 
     }
+    public PagedList<Post> GetAll(PaginationParameters parameters)
+    {
+        var posts = _context.Set<Post>().AsNoTracking().ToList();   
+        return PagedList<Post>
+            .ToPagedList(posts, parameters.PageNumber, parameters.PageSize); 
+    }
+    public async Task<List<Post>> GetAllOfUser(int userId)
+    {
+        return await _context.Posts.AsNoTracking()
+            .Where(p => p.UserId == userId).ToListAsync(); 
+     }
     public async Task<Post> GetByIdAsync(int id)
     {
         return  await _context.Posts.AsNoTracking().Include(p => p.Comments)
                 .FirstOrDefaultAsync(p => p.Id == id); 
     }
-
+    public async Task<Post> GetByIdTrackingAsync(int id, int userId)
+    {
+        return await _context.Posts.Where(c => c.UserId == userId)
+        .FirstOrDefaultAsync(p => p.Id == id); 
+    }
     public async Task<Post> CreateAsync(Post post)
     {
         _context.Posts.Add(post); 
@@ -33,22 +48,5 @@ public class PostRepository : IPostRepository
     {
         _context.Remove(post); 
         await _context.SaveChangesAsync(); 
-    }
-
-    public async Task<Post> GetByIdTrackingAsync(int id, int userId)
-    {
-        return await _context.Posts.Where(c => c.UserId == userId)
-        .FirstOrDefaultAsync(p => p.Id == id); 
-    }
-
-    public PagedList<Post> GetAll(PaginationParameters parameters)
-    {
-        // return await _context.Posts.AsNoTracking() 
-        //     .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-        //     .Take(parameters.PageSize)
-        //     .ToListAsync(); 
-        var posts = _context.Set<Post>().ToList();   
-        return PagedList<Post>
-            .ToPagedList(posts, parameters.PageNumber, parameters.PageSize); 
     }
 }
