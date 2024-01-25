@@ -6,6 +6,7 @@ namespace BlogMVC.Domain.Interfaces;
 public interface IPostRepository
 {
     PagedList<Post> GetAll(PaginationParameters parameters);
+    Task<List<Post>> GetAllOfUser(int userId); 
     Task<Post> GetByIdAsync(int id);
     Task<Post> GetByIdTrackingAsync(int id, int userId); 
     Task<Post> CreateAsync(Post post); 

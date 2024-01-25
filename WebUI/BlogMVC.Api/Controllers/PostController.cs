@@ -83,6 +83,19 @@ public class PostController : BlogController
 
     }
 
+    [HttpGet("all-user")] 
+    [ProducesResponseType(typeof(GetPostsResponseJson), StatusCodes.Status200OK)]
+    [ServiceFilter(typeof(AuthenticatedUserAttribute))]
+    public async Task<ActionResult> GetAllUser()
+    {
+        var response = await _postService.GetAllOfUser(); 
+        if(!response.Any())
+            return NoContent(); 
+        
+        return Ok(response);  
+    }
+
+
     [HttpPut("{id:int}")]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ServiceFilter(typeof(AuthenticatedUserAttribute))]
