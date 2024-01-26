@@ -44,20 +44,20 @@ public static class DependencyInjection
 
     private static void AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IUnityOfWork, UnityOfWork>(); 
-        services.AddScoped<IUserRepository, UserRepository>(); 
-        services.AddScoped<IPostRepository, PostRepository>(); 
-        services.AddScoped<ICommentRepository, CommentRepository>(); 
+        services.AddScoped<IUnityOfWork, UnityOfWork>() 
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IPostRepository, PostRepository>()
+            .AddScoped<ICommentRepository, CommentRepository>(); 
     }
 
     private static void AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IPostService, PostService>();
-        services.AddScoped<ICommentService, CommentService>();
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<ILoginService, LoginService>(); 
-        services.AddScoped<IUserLogged, UserLogged>();
-        services.AddScoped<TokenService>();
+        services.AddScoped<IPostService, PostService>()
+            .AddScoped<ICommentService, CommentService>()
+            .AddScoped<IUserService, UserService>()
+            .AddScoped<ILoginService, LoginService>() 
+            .AddScoped<IUserLogged, UserLogged>()
+            .AddScoped<TokenService>();
 
     }
 
@@ -68,12 +68,12 @@ public static class DependencyInjection
 
     private static void AddValidators(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<CreatePostRequestJson>, CreatePostValidator>();
-        services.AddScoped<IValidator<UpdatePostRequestJson>, UpdatePostValidator>();  
-        services.AddScoped<IValidator<CreateCommentRequestJson>, CreateCommentValidator>();
-        services.AddScoped<IValidator<CreateAccountRequestJson>, CreateAccountValidator>();
-        services.AddScoped<IValidator<LoginRequestJson>, LoginValidator>();
-        services.AddScoped<IValidator<UpdatePasswordRequestJson>, UpdatePasswordValidator>();
+        services.AddScoped<IValidator<CreatePostRequestJson>, CreatePostValidator>()
+            .AddScoped<IValidator<UpdatePostRequestJson>, UpdatePostValidator>()  
+            .AddScoped<IValidator<CreateCommentRequestJson>, CreateCommentValidator>()
+            .AddScoped<IValidator<CreateAccountRequestJson>, CreateAccountValidator>()
+            .AddScoped<IValidator<LoginRequestJson>, LoginValidator>()
+            .AddScoped<IValidator<UpdatePasswordRequestJson>, UpdatePasswordValidator>();
     }
 
 }
