@@ -31,7 +31,8 @@ public class PostService : IPostService
     public async Task<GetPostResponseJson> CreatePostAsync(CreatePostRequestJson request)
     {
         var model = _mapper.Map<Post>(request); 
-        model.CreatedAt = DateTime.Now; 
+        model.CreatedAt = DateTime.Now;
+        model.UpdateAt = model.CreatedAt;  
         var user = await _userLogged.GetUser(); 
         model.UserId = user.Id; 
         await _repository.CreateAsync(model); 
@@ -77,6 +78,7 @@ public class PostService : IPostService
             throw new NotFoundException(); 
         } 
         _mapper.Map(request, post); 
+        post.UpdateAt = DateTime.Now; 
         await _repository.UpdateAsync(); 
         await _unityOfWork.Commit(); 
         return true;  
