@@ -1,7 +1,6 @@
 using AutoMapper;
 using BlogMVC.Application.Dtos.Comment;
 using BlogMVC.Application.Dtos.Post;
-using BlogMVC.Application.Dtos.Tags;
 using BlogMVC.Application.Dtos.User;
 using BlogMVC.Domain.Entities;
 
