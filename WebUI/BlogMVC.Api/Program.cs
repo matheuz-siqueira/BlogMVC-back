@@ -20,6 +20,12 @@ builder.Services.AddMvc(option => option.Filters.Add(typeof(ExceptionsFilter)));
 builder.Services.AddScoped<AuthenticatedUserAttribute>();
 var app = builder.Build();
 
+app.UseCors(policy => {
+    policy.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

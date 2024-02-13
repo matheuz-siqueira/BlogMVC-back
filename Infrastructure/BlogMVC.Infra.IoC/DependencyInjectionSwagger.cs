@@ -18,7 +18,7 @@ public static class DependencyInjectionSwagger
         {
             Title = "MyFrellasAPI",
             Version = "v1",
-            Description = "Gerenciador de projetos freelas",
+            Description = "Blog clássico",
             Contact = new OpenApiContact
             {
                 Name = "Matheus Siqueira",
