@@ -1,5 +1,3 @@
-using BlogMVC.Domain.Validation;
-
 namespace BlogMVC.Domain.Entities;
 
 public sealed class Post : BaseEntity
