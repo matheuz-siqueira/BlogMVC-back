@@ -1,5 +1,4 @@
-using AutoMapper;
-using AutoMapper.Execution;
+using AutoMapper;   
 using BlogMVC.Application.Dtos.Post;
 using BlogMVC.Application.Exceptions.BaseExceptions;
 using BlogMVC.Application.Interfaces;
@@ -72,11 +71,7 @@ public class PostService : IPostService
     public async Task<bool> UpdateAsync(int id, UpdatePostRequestJson request)
     {
         var user = await _userLogged.GetUser();
-        var post = await _repository.GetByIdTrackingAsync(id, user.Id); 
-        if(post is null)
-        {
-            throw new NotFoundException(); 
-        } 
+        var post = await _repository.GetByIdTrackingAsync(id, user.Id) ?? throw new NotFoundException();
         _mapper.Map(request, post); 
         post.UpdateAt = DateTime.Now; 
         await _repository.UpdateAsync(); 

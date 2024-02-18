@@ -26,7 +26,9 @@ public class LoginService : ILoginService
         var token = _tokenService.GenerateToken(user.Email);
         return new LoginResponseJson
         {
+
             Name = user.Name, 
+            Email = user.Email,
             Token = token 
         };   
     }

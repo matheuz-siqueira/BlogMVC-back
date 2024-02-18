@@ -16,7 +16,7 @@ public static class DependencyInjectionSwagger
         {
         c.SwaggerDoc("v1", new OpenApiInfo
         {
-            Title = "MyFrellasAPI",
+            Title = "BlogMVC",
             Version = "v1",
             Description = "Blog clássico",
             Contact = new OpenApiContact
